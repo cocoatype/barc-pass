@@ -53,24 +53,26 @@ func buildRouter(files: StaticFiles) -> Router<AppRequestContext> {
         return "Hello, world!"
     }
 
-    router.get("/generate") { _, _ in
-        return try await PassGenerator().generatePass(files: files)
+    router.post("/generate") { request, context in
+        let passRequest = try await request.decode(as: PassRequest.self, context: context)
+        return try await PassGenerator().generatePass(request: passRequest, files: files)
     }
 
-    router.get("/generate-pass") { _, _ in
-        return Pass()
+    router.post("/generate-pass") { request, context in
+        let passRequest = try await request.decode(as: PassRequest.self, context: context)
+        return Pass(passRequest)
     }
 
-    router.get("/generate-manifest") { _, _ in
-        let pass = Pass()
-//        let passData = try JSONEncoder().encode(Pass())
+    router.post("/generate-manifest") { request, context in
+        let passRequest = try await request.decode(as: PassRequest.self, context: context)
+        let pass = Pass(passRequest)
         let manifest = Manifest(pass: pass, files: files)
         return manifest
     }
 
-    router.get("/generate-signature") { _, _ in
-        let pass = Pass()
-//        let passData = try JSONEncoder().encode(Pass())
+    router.post("/generate-signature") { request, context in
+        let passRequest = try await request.decode(as: PassRequest.self, context: context)
+        let pass = Pass(passRequest)
         let manifest = Manifest(pass: pass, files: files)
         let manifestData = try JSONEncoder().encode(manifest)
         let signature = try await Signer().sign(manifestData)

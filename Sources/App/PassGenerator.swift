@@ -2,8 +2,8 @@ import Foundation
 import Hummingbird
 
 struct PassGenerator {
-    func generatePass(files: StaticFiles) async throws -> Response {
-        let pass = Pass()
+    func generatePass(request: PassRequest, files: StaticFiles) async throws -> Response {
+        let pass = Pass(request)
         let manifest = Manifest(pass: pass, files: files)
         let bundle = try await Bundler().bundle(pass: pass, manifest: manifest, files: files)
         return passResponse(data: bundle)

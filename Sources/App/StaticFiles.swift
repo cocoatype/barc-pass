@@ -12,7 +12,7 @@ struct StaticFiles {
 
     static func data(for environmentVariable: String) throws -> Data {
         guard let path = Environment().get(environmentVariable)
-        else { throw StaticFilesError.missingEnvironmentVariable }
+        else { throw StaticFilesError.missingEnvironmentVariable(environmentVariable) }
 
         return try data(at: path)
     }
@@ -30,5 +30,5 @@ struct StaticFiles {
 }
 
 enum StaticFilesError: Error {
-    case missingEnvironmentVariable
+    case missingEnvironmentVariable(String)
 }
