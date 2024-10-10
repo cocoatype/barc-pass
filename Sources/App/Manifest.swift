@@ -3,6 +3,12 @@ import Foundation
 import Hummingbird
 
 struct Manifest: ResponseEncodable {
+    static let encoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        return encoder
+    }()
+
     private let pass: Pass
     private let staticFiles: StaticFiles
 
@@ -18,7 +24,7 @@ struct Manifest: ResponseEncodable {
 
     func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(hash(for: try JSONEncoder().encode(pass)), forKey: .passSum)
+        try container.encode(hash(for: try Pass.encoder.encode(pass)), forKey: .passSum)
         try container.encode(hash(for: staticFiles.iconAt1xData), forKey: .iconAt1XSum)
         try container.encode(hash(for: staticFiles.iconAt2xData), forKey: .iconAt2XSum)
         try container.encode(hash(for: staticFiles.iconAt3xData), forKey: .iconAt3XSum)

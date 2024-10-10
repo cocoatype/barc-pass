@@ -9,10 +9,6 @@ struct PassGenerator {
         return passResponse(data: bundle)
     }
 
-    private func passData() throws -> Data {
-        try JSONEncoder().encode(Pass())
-    }
-
     private func passResponse(data: Data) -> Response {
         Response(
             status: .ok,

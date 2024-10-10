@@ -2,16 +2,23 @@ import Foundation
 import Hummingbird
 
 struct Pass: ResponseEncodable {
+    static let encoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        return encoder
+    }()
+
     let description: String
     let formatVersion = 1
     let organizationName = "Cocoatype, LLC"
     let passTypeIdentifier = "pass.com.cocoatype.Barc.pkpass"
-    let serialNumber: String = UUID().uuidString
+    let serialNumber = UUID().uuidString
     let teamIdentifier = "287EDDET2B"
     let backgroundColor = "rgb(242,242,245)"
     let foregroundColor = "rgb(0,0,0)"
     let associatedStoreIdentifiers = [6642707689]
     let logoText: String
+    let groupingIdentifier = UUID().uuidString
 
     let barcodes: [Pass.Barcode]
     let storeCard = Pass.StoreCard()
@@ -20,10 +27,6 @@ struct Pass: ResponseEncodable {
         self.description = request.title
         self.logoText = request.title
         self.barcodes = [Pass.Barcode(request.barcode)]
-    }
-
-    init() {
-        self.init(PassRequest(title: "Website", barcode: PassRequest.Barcode.qr("https://getbarc.app")))
     }
 }
 

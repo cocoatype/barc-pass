@@ -74,7 +74,7 @@ func buildRouter(files: StaticFiles) -> Router<AppRequestContext> {
         let passRequest = try await request.decode(as: PassRequest.self, context: context)
         let pass = Pass(passRequest)
         let manifest = Manifest(pass: pass, files: files)
-        let manifestData = try JSONEncoder().encode(manifest)
+        let manifestData = try Manifest.encoder.encode(manifest)
         let signature = try await Signer().sign(manifestData)
         
         return ByteBuffer(data: signature)

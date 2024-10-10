@@ -10,10 +10,10 @@ struct Bundler {
             _ = try? FileManager.default.removeItem(at: bundleDirectory)
         }
 
-        let passData = try JSONEncoder().encode(pass)
+        let passData = try Pass.encoder.encode(pass)
         try passData.write(to: bundleDirectory.appending(path: "pass.json"))
 
-        let manifestData = try JSONEncoder().encode(manifest)
+        let manifestData = try Manifest.encoder.encode(manifest)
         try manifestData.write(to: bundleDirectory.appending(path: "manifest.json"))
 
         let signatureData = try await Signer().sign(manifestData)
