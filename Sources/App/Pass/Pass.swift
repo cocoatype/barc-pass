@@ -8,6 +8,9 @@ struct Pass: ResponseEncodable {
         return encoder
     }()
 
+
+    static let dateFormatStyle = Date.ISO8601FormatStyle.iso8601
+
     let description: String
     let formatVersion = 1
     let organizationName = "Cocoatype, LLC"
@@ -22,33 +25,19 @@ struct Pass: ResponseEncodable {
 
     let barcodes: [Pass.Barcode]
     let storeCard = Pass.StoreCard()
+    let locations: [Pass.Location]
+    let relevantDate: String?
 
     init(_ request: PassRequest) {
         self.description = request.title
         self.logoText = request.title
         self.barcodes = [Pass.Barcode(request.barcode)]
-    }
-}
+        self.locations = request.locations.map(Pass.Location.init)
 
-extension Pass {
-    struct StoreCard: ResponseEncodable {}
-}
-
-extension Pass {
-    struct Barcode: ResponseEncodable {
-        let format: String
-        let message: String
-        let messageEncoding = "utf-8"
-
-        init(_ request: PassRequest.Barcode) {
-            switch request {
-                case .qr(let message):
-                    self.format = "PKBarcodeFormatQR"
-                    self.message = message
-                case .code128(let message):
-                    self.format = "PKBarcodeFormatCode128"
-                    self.message = message
-            }
-        }
+        self.relevantDate = try? request.dates
+          .compactMap(Self.dateFormatStyle.parse(_:))
+          .sorted()
+          .first
+          .map(Self.dateFormatStyle.format(_:))
     }
 }

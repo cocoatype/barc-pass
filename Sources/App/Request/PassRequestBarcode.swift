@@ -1,9 +1,4 @@
-import Foundation
-
-struct PassRequest: Decodable {
-    let title: String
-    let barcode: Barcode
-
+extension PassRequest {
     enum Barcode: Decodable {
         case qr(String)
         case code128(String)
@@ -28,24 +23,3 @@ struct PassRequest: Decodable {
         }
     }
 }
-
-enum PassRequestDecodeError: Error {
-    case unknownFormat(String)
-}
-
-/* Barc Supports
- * EAN-13
- * UPC-A
- * Code 39
- * Codabar
- */
-
-/* Both Support
- * QR
- * Code 128
- */
-
-/* Apple Wallet Supports
- * Aztec
- * PDF417
- */
