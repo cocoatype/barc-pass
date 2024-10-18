@@ -7,10 +7,6 @@ struct PassRequest: Decodable {
     let dates: [String]
 }
 
-enum PassRequestDecodeError: Error {
-    case unknownFormat(String)
-}
-
 /* Barc Supports
  * EAN-13
  * UPC-A

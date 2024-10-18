@@ -31,7 +31,7 @@ struct Pass: ResponseEncodable {
     init(_ request: PassRequest) {
         self.description = request.title
         self.logoText = request.title
-        self.barcodes = [Pass.Barcode(request.barcode)]
+        self.barcodes = [request.barcode].compactMap { try? Pass.Barcode($0) }
         self.locations = request.locations.map(Pass.Location.init)
 
         self.relevantDate = try? request.dates
