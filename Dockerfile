@@ -55,6 +55,7 @@ RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
     && apt-get -q dist-upgrade -y \
     && apt-get -q install -y \
       libjemalloc2 \
+      librsvg2-bin \
       ca-certificates \
       tzdata \
       zip \
@@ -75,6 +76,8 @@ COPY --from=build --chown=hummingbird:hummingbird /staging /app
 
 # Provide configuration needed by the built-in crash reporter and some sensible default behaviors.
 ENV SWIFT_BACKTRACE=enable=yes,sanitize=yes,threads=all,images=all,interactive=no,swift-backtrace=./swift-backtrace-static
+ENV BARC_OPENSSL_PATH=/usr/bin/openssl
+ENV BARC_RSVG_PATH=/usr/bin/rsvg-convert
 
 # Ensure all further commands run as the hummingbird user
 USER hummingbird:hummingbird
