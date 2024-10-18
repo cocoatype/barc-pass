@@ -66,14 +66,14 @@ func buildRouter(files: StaticFiles) -> Router<AppRequestContext> {
     router.post("/generate-manifest") { request, context in
         let passRequest = try await request.decode(as: PassRequest.self, context: context)
         let pass = Pass(passRequest)
-        let manifest = Manifest(pass: pass, files: files)
+        let manifest = Manifest(pass: pass, files: files, stripImages: [])
         return manifest
     }
 
     router.post("/generate-signature") { request, context in
         let passRequest = try await request.decode(as: PassRequest.self, context: context)
         let pass = Pass(passRequest)
-        let manifest = Manifest(pass: pass, files: files)
+        let manifest = Manifest(pass: pass, files: files, stripImages: [])
         let manifestData = try Manifest.encoder.encode(manifest)
         let signature = try await Signer().sign(manifestData)
         
