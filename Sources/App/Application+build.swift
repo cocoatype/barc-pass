@@ -84,9 +84,7 @@ func buildRouter(files: StaticFiles) -> Router<AppRequestContext> {
         let passRequest = try await request.decode(as: PassRequest.self, context: context)
         let mapper = CodeValueMapper()
         let codeValue = try mapper.codeValue(from: passRequest)
-//        let pass = Pass(passRequest)
         let renderer = CodeRenderer(value: codeValue)
-//        let renderer = SingleDimensionCodeRenderer(encodedValue: [true, false, true])
 
         var response = renderer.svg.response(from: request, context: context)
         response.headers = [
@@ -94,6 +92,24 @@ func buildRouter(files: StaticFiles) -> Router<AppRequestContext> {
 //            .contentDisposition: "attachment; filename=\"pass.svg\"",
         ]
         print("value: \(renderer.svg)")
+        return response
+    }
+
+    router.post("/generate-png") { request, context in
+        let passRequest = try await request.decode(as: PassRequest.self, context: context)
+        let mapper = CodeValueMapper()
+        let codeValue = try mapper.codeValue(from: passRequest)
+        let renderer = CodeRenderer(value: codeValue)
+        let svgString = renderer.svg
+
+        let converter = PNGConverter()
+        let pngData = try await converter.convert(svgString, zoomLevel: 3)
+
+        var response = ByteBuffer(data: pngData).response(from: request, context: context)
+        response.headers = [
+            .contentType: "image/png",
+//            .contentDisposition: "attachment; filename=\"pass.svg\"",
+        ]
         return response
     }
 
