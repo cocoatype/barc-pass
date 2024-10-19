@@ -9,16 +9,12 @@ public struct CodeRenderer {
 
     public var svg: String {
         switch value {
-//        case .qr(let value):
-//            QRCodeRenderer(value: value)
+        case .codabar(let value):
+            CodabarCodeRenderer(heresTheDumbThingIDid: value).svg
+        case .code39(let value):
+            Code39CodeRenderer(value: value).svg
         case .ean(let value):
             EANCodeRenderer(value: value).svg
-//        case .code128(let value):
-//            Code128CodeRenderer(value: value)
-//        case .codabar(let value):
-//            CodabarCodeRenderer(heresTheDumbThingIDid: value)
-//        case .code39(let value):
-//            Code39CodeRenderer(value: value)
         }
     }
 }
