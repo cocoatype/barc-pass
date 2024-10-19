@@ -66,20 +66,52 @@ func buildRouter(files: StaticFiles) -> Router<AppRequestContext> {
     router.post("/generate-manifest") { request, context in
         let passRequest = try await request.decode(as: PassRequest.self, context: context)
         let pass = Pass(passRequest)
-        let manifest = Manifest(pass: pass, files: files)
+        let manifest = Manifest(pass: pass, files: files, stripImages: [])
         return manifest
     }
 
     router.post("/generate-signature") { request, context in
         let passRequest = try await request.decode(as: PassRequest.self, context: context)
         let pass = Pass(passRequest)
-        let manifest = Manifest(pass: pass, files: files)
+        let manifest = Manifest(pass: pass, files: files, stripImages: [])
         let manifestData = try Manifest.encoder.encode(manifest)
         let signature = try await Signer().sign(manifestData)
         
         return ByteBuffer(data: signature)
     }
 
+    router.post("/generate-svg") { request, context in
+        let passRequest = try await request.decode(as: PassRequest.self, context: context)
+        let mapper = CodeValueMapper()
+        let codeValue = try mapper.codeValue(from: passRequest)
+        let renderer = CodeRenderer(value: codeValue)
+
+        var response = renderer.svg.response(from: request, context: context)
+        response.headers = [
+            .contentType: "image/svg+xml",
+//            .contentDisposition: "attachment; filename=\"pass.svg\"",
+        ]
+        print("value: \(renderer.svg)")
+        return response
+    }
+
+    router.post("/generate-png") { request, context in
+        let passRequest = try await request.decode(as: PassRequest.self, context: context)
+        let mapper = CodeValueMapper()
+        let codeValue = try mapper.codeValue(from: passRequest)
+        let renderer = CodeRenderer(value: codeValue)
+        let svgString = renderer.svg
+
+        let converter = PNGConverter()
+        let pngData = try await converter.convert(svgString, zoomLevel: 3)
+
+        var response = ByteBuffer(data: pngData).response(from: request, context: context)
+        response.headers = [
+            .contentType: "image/png",
+//            .contentDisposition: "attachment; filename=\"pass.svg\"",
+        ]
+        return response
+    }
 
     return router
 }
