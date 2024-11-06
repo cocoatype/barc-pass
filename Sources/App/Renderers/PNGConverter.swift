@@ -42,9 +42,13 @@ struct PNGConverter {
     private var rsvgURL: URL {
         get throws {
             guard let path = Environment().get("BARC_RSVG_PATH")
-            else { throw SigningError.cannotFindOpenSSL }
+            else { throw PNGConversionError.cannotFindRSVG }
 
             return URL(filePath: path)
         }
     }
+}
+
+enum PNGConversionError: Error {
+    case cannotFindRSVG
 }
