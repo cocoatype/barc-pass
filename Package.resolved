@@ -1,5 +1,5 @@
 {
-  "originHash" : "949f8f3478182cb864bf66a25013671099a76ceb6573f781a9c5b2274636e1fb",
+  "originHash" : "37fcd22ead3ab76694665874523b7a40555f254079d8b8dfc0fd6a9b01593dc8",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -11,12 +11,30 @@
       }
     },
     {
+      "identity" : "bigint",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/attaswift/BigInt.git",
+      "state" : {
+        "revision" : "114343a705df4725dfe7ab8a2a326b8883cfd79c",
+        "version" : "5.5.1"
+      }
+    },
+    {
       "identity" : "hummingbird",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/hummingbird-project/hummingbird.git",
       "state" : {
         "revision" : "d4f792d209f02b26a17c0105751220da65207fb2",
         "version" : "2.0.1"
+      }
+    },
+    {
+      "identity" : "pdf417",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/cocoatype/PDF417.git",
+      "state" : {
+        "branch" : "trunk",
+        "revision" : "065845840f6ddbd362f45f27ed3a2930400e40fe"
       }
     },
     {

@@ -7,7 +7,7 @@ struct CodeValueMapper {
             try CodeValue.code39(value: string)
         case .ean13(let string):
             try CodeValue.ean(value: string)
-        case .code128, .qr:
+        case .code128, .pdf417, .qr:
             throw CodeValueMapperError.unsupportedBarcodeFormat
         }
     }

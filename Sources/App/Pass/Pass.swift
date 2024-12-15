@@ -28,10 +28,10 @@ struct Pass: ResponseEncodable {
     let locations: [Pass.Location]
     let relevantDate: String?
 
-    init(_ request: PassRequest) {
+    init(_ request: PassRequest) throws {
         self.description = request.title
         self.logoText = request.title
-        self.barcodes = [request.barcode].compactMap { try? Pass.Barcode($0) }
+        self.barcodes = try [request.barcode].compactMap { try Pass.Barcode($0) }
         self.locations = request.locations.map(Pass.Location.init)
 
         self.relevantDate = try? request.dates

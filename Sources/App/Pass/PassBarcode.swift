@@ -14,6 +14,9 @@ extension Pass {
             case .code128(let message):
                 self.format = "PKBarcodeFormatCode128"
                 self.message = message
+            case .pdf417(let message):
+                self.format = "PKBarcodeFormatPDF417"
+                self.message = try PDF417MessageDecoder().decodedMessage(from: message)
             case .codabar, .code39, .ean13:
                 throw PassBarcodeError.unsupportedBarcodeFormat
             }

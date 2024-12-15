@@ -31,7 +31,7 @@ struct StripImageGenerator {
     private func barcodeFormatUsesStripImages(_ barcode: PassRequest.Barcode) -> Bool {
         switch barcode {
         case .codabar, .code39, .ean13: true
-        case .code128, .qr: false
+        case .code128, .pdf417, .qr: false
         }
     }
 }

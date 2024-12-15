@@ -5,7 +5,7 @@ struct PassGenerator {
     private let bundler = Bundler()
     private let stripImageGenerator = StripImageGenerator()
     func generatePass(request: PassRequest, files: StaticFiles) async throws -> Response {
-        let pass = Pass(request)
+        let pass = try Pass(request)
         let stripImages = try await stripImageGenerator.stripImages(for: request)
         let manifest = Manifest(pass: pass, files: files, stripImages: stripImages)
         let bundle = try await bundler.bundle(pass: pass, manifest: manifest, files: files, stripImages: stripImages)

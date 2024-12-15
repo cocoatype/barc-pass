@@ -1,9 +1,10 @@
 extension PassRequest {
     enum Barcode: Decodable {
         case codabar(String)
-        case code128(String)
         case code39(String)
+        case code128(String)
         case ean13(String)
+        case pdf417(String)
         case qr(String)
 
         init(from decoder: any Decoder) throws {
@@ -13,12 +14,14 @@ extension PassRequest {
             switch format {
             case "codabar":
                 self = .codabar(message)
-            case "code128":
-                self = .code128(message)
             case "code39":
                 self = .code39(message)
+            case "code128":
+                self = .code128(message)
             case "ean13":
                 self = .ean13(message)
+            case "pdf417":
+                self = .pdf417(message)
             case "qr":
                 self = .qr(message)
             default:
