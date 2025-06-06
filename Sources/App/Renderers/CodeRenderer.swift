@@ -15,6 +15,8 @@ public struct CodeRenderer {
             Code39CodeRenderer(value: value).svg
         case .ean(let value):
             EANCodeRenderer(value: value).svg
+        case .itf(let value):
+            ITFCodeRenderer(value: value).svg
         }
     }
 }

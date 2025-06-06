@@ -7,6 +7,7 @@ public enum CodeValue: Hashable, Identifiable, Sendable {
     case codabar(CodabarCodeValue)
     case code39(Code39CodeValue)
     case ean(EANCodeValue)
+    case itf(ITFCodeValue)
 
     public static func code39(value: String) throws -> CodeValue {
         return try .code39(Code39CodeValue(payload: Code39PayloadParser().payload(for: value)))
@@ -22,11 +23,16 @@ public enum CodeValue: Hashable, Identifiable, Sendable {
         return try .ean(EANCodeValue(payload: EANPayloadParser().payload(for: value)))
     }
 
+    public static func itf(value: String) throws -> CodeValue {
+        return try .itf(ITFCodeValue(payload: ITFPayloadParser().payload(for: value)))
+    }
+
     public var id: String {
         switch self {
         case .codabar(let value): value.id
         case .code39(let value): value.id
         case .ean(let value): value.id
+        case .itf(let value): value.id
         }
     }
 
@@ -34,7 +40,7 @@ public enum CodeValue: Hashable, Identifiable, Sendable {
     // the aspect ratio of the represented barcode
     public var kineNoo: Double {
         switch self {
-        case .code39, .codabar, .ean: 1 / 2
+        case .code39, .codabar, .ean, .itf: 1 / 2
         }
     }
 }
